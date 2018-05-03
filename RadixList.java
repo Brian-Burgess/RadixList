@@ -133,7 +133,7 @@ public class RadixList {
         int index = element % 10; // grabs least significant digit
 
         if(element/10 == 0) { // if at last step of recursion, remove  the element if the key exists
-            if(map.containsKey(index)) {
+            if(map.containsKey(index) && ((HashMap) map.get(index)).containsKey(null)) {
                 ((HashMap) map.get(index)).remove(null);
                 numValues--;
                 return true;
@@ -165,7 +165,7 @@ public class RadixList {
     /**
      * Uses counting sort to sort the list.
      * TODO Actually make it a radix sort.....
-     * 
+     *
      * @return Sorted array of integers.
      */
     public int[] toSortedArray(){
