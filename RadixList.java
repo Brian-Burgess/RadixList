@@ -1,8 +1,12 @@
+package RadixPack;
 import java.util.HashMap;
 
 public class RadixList {
 
     private HashMap baseMap;
+    private int minValue = Integer.MAX_VALUE;
+    private int maxValue = Integer.MIN_VALUE;
+    private int numValues = 0;
 
     /**
      * Default constructor for RadixList. Creates empty HashMap.
@@ -10,12 +14,7 @@ public class RadixList {
     public RadixList(){
         baseMap = new HashMap<Integer, HashMap>();
     }
-    
-    /**
-     * RadixList array constructor. Adds all elements of an array to a RadixList.
-     *
-     * @param array Elements to add.
-     */
+
     public RadixList(int[] array){
         baseMap = new HashMap<Integer, HashMap>();
         for (int value : array){
@@ -32,13 +31,22 @@ public class RadixList {
     public boolean add(int element) {
         HashMap workingMap = baseMap;
 
+        if (element < minValue){
+            minValue = element;
+        }
+        if (element > maxValue){
+            maxValue = element;
+        }
+
         if(element == 0){
             if(!workingMap.containsKey(0)) {
                 workingMap.put(0, new HashMap<Integer, HashMap>());
                 ((HashMap) workingMap.get(0)).put(null, null);
+                numValues++;
                 return true;
             } else if(!((HashMap) workingMap.get(0)).containsKey(null)){
                 ((HashMap) workingMap.get(0)).put(null, null);
+                numValues++;
                 return true;
             } else{
                 return false;
@@ -58,6 +66,7 @@ public class RadixList {
             } else if (element / 10 == 0){
                 if(!workingMap.containsKey(null)) {
                     ((HashMap) workingMap.get(index)).put(null, null);
+                    numValues++;
                     return true;
                 }
                 return false; // element already exists
@@ -66,6 +75,7 @@ public class RadixList {
             workingMap = (HashMap) workingMap.get(index); //goes to next hierarchy of map
         }
 
+        numValues++;
         return true;
     }
 
@@ -125,6 +135,7 @@ public class RadixList {
         if(element/10 == 0) { // if at last step of recursion, remove  the element if the key exists
             if(map.containsKey(index)) {
                 ((HashMap) map.get(index)).remove(null);
+                numValues--;
                 return true;
             } else{
                 return false;
@@ -149,5 +160,33 @@ public class RadixList {
      */
     public boolean update(int currentElement, int updatedValue){
         return remove(currentElement) && add(updatedValue);
+    }
+
+    /**
+     * Uses counting sort to sort the list.
+     * TODO Actually make it a radix sort.....
+     * 
+     * @return Sorted array of integers.
+     */
+    public int[] toSortedArray(){
+
+        int[] sortedArray = new int[numValues];
+
+        for(int i = minValue, j = 0; i <= maxValue; i++){
+            if(contains(i)){
+                sortedArray[j] = i;
+                j++;
+            }
+        }
+
+        return sortedArray;
+    }
+
+    /**
+     * Function to return the number of elements in the RadixList
+     * @return Number of values in RadixList
+     */
+    public int size(){
+        return numValues;
     }
 }
