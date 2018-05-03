@@ -11,7 +11,12 @@ public class RadixList {
     public RadixList(){
         baseMap = new HashMap<Integer, HashMap>();
     }
-
+    
+    /**
+     * RadixList array constructor. Adds all elements of an array to a RadixList.
+     *
+     * @param array Elements to add.
+     */
     public RadixList(int[] array){
         baseMap = new HashMap<Integer, HashMap>();
         for (int value : array){
