@@ -1,4 +1,3 @@
-package RadixPack;
 import java.util.HashMap;
 
 public class RadixList {
